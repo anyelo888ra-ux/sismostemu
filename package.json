@@ -1,15 +1,12 @@
 {
-  "name": "miweb",
+  "name": "sismostemu",
   "version": "1.0.0",
-  "description": "",
+  "description": "Servidor de sismos para Venezuela",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "express": "^5.2.1",
     "node-fetch": "^3.3.2"
