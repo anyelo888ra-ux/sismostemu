@@ -12,6 +12,37 @@ index.html
     table { width: 90%; margin: auto; border-collapse: collapse; }
     th, td { padding: 10px; border-bottom: 1px solid #444; }
     tr:hover { background: #222; }
+
+    /* Verity Support */
+    #verity-box {
+      width: 90%;
+      margin: 40px auto;
+      background: #151515;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #333;
+    }
+    #verity-box input, #verity-box button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: none;
+      background: #222;
+      color: #fff;
+    }
+    #verity-box button {
+      background: #333;
+      cursor: pointer;
+    }
+    #respuesta {
+      margin-top: 20px;
+      padding: 15px;
+      background: #111;
+      border-radius: 5px;
+      border: 1px solid #333;
+      min-height: 50px;
+    }
   </style>
 </head>
 <body>
@@ -21,6 +52,17 @@ index.html
 <div id="map"></div>
 
 <table id="tabla"></table>
+
+<!-- SOPORTE VERITY -->
+<div id="verity-box">
+  <h2>Verity Support System</h2>
+  <p>Escribe tu consulta:</p>
+
+  <input id="pregunta" type="text" placeholder="¿Qué deseas analizar?">
+  <button onclick="procesar()">Enviar</button>
+
+  <div id="respuesta"></div>
+</div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
@@ -47,18 +89,36 @@ async function cargar() {
   }).addTo(map);
 
   data.forEach(s => {
-    const match = s.lugar.match(/(-?\d+\.\d+),\s*(-?\d+\.\d+)/);
-    if (!match) return;
+    if (!s.lat || !s.lon) return;
 
-    const lat = parseFloat(match[1]);
-    const lon = parseFloat(match[2]);
-
-    L.marker([lat, lon]).addTo(map)
+    L.marker([s.lat, s.lon]).addTo(map)
       .bindPopup(`<b>${s.lugar}</b><br>Magnitud: ${s.magnitud}`);
   });
 }
 
 cargar();
+
+// VERITY SUPPORT LOGIC
+function procesar() {
+  let p = document.getElementById("pregunta").value.toLowerCase();
+  let r = "";
+
+  if (p.length < 3) {
+      r = "Datos insuficientes.";
+  } else if (p.includes("error") || p.includes("fallo")) {
+      r = "Anomalía detectada en tu reporte.";
+  } else if (p.includes("sismo") || p.includes("temblor")) {
+      r = "Actividad sísmica analizada. No representa amenaza significativa.";
+  } else if (p.includes("hola") || p.includes("hey")) {
+      r = "Movimiento detectado. Procesando tu señal.";
+  } else if (p.includes("quien eres") || p.includes("nombre")) {
+      r = "Soy Verity. No un nombre… una función.";
+  } else {
+      r = "Consulta procesada.";
+  }
+
+  document.getElementById("respuesta").innerText = r;
+}
 </script>
 
 </body>
