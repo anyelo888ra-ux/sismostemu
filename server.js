@@ -1,16 +1,29 @@
 import express from "express";
 import fetch from "node-fetch";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 const PORT = 3000;
+
+// Definir __dirname en ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Coordenadas del centro (Venezuela)
 const latitude = 8.0;
 const longitude = -66.0;
 const maxradiuskm = 800;
 
-// Servir carpeta public
-app.use(express.static("public"));
+// Servir carpeta public con ruta absoluta
+app.use(express.static(path.join(__dirname, "public")));
+
+// Ruta explícita para asegurar que Vercel sirva el index.html
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// ... el resto de tu código de /sismos sigue igual ...
 
 app.get("/sismos", async (req, res) => {
   try {
